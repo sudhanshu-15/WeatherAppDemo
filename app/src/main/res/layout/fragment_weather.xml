@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.homeshare.sudhanshu.weatherappdemo.WeatherFragment"
-    android:background="#90CAF9">
+    android:background="#0090CAF9">
 
     <TextView
         android:id="@+id/city_field"
