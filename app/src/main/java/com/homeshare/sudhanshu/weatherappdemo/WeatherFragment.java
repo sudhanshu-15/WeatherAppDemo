@@ -1,12 +1,16 @@
 package com.homeshare.sudhanshu.weatherappdemo;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 
 /**
@@ -26,6 +30,14 @@ public class WeatherFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private TextView cityField;
+    private TextView updatedField;
+    private TextView detailsField;
+    private TextView currentTemp;
+    private TextView weatherIcon;
+
+    private Typeface weatherFont;
 
     private OnFragmentInteractionListener mListener;
 
@@ -54,17 +66,23 @@ public class WeatherFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        weatherFont = Typeface.createFromAsset(getContext().getAssets(), "fonts/weather.ttf");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_weather, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_weather, container, false);
+        cityField = (TextView) rootView.findViewById(R.id.city_field);
+        updatedField = (TextView)rootView.findViewById(R.id.updated_field);
+        detailsField = (TextView) rootView.findViewById(R.id.details_field);
+        currentTemp = (TextView)rootView.findViewById(R.id.current_temperature_field);
+        weatherIcon = (TextView)rootView.findViewById(R.id.weather_icon);
+
+        weatherIcon.setTypeface(weatherFont);
+        loadDisplay();
+        return rootView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -104,5 +122,15 @@ public class WeatherFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public void loadDisplay(){
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE);
+        Log.d("FRAG", "loadDisplay: " + sharedPreferences.getString(Constants.CITY, "Loading"));
+        cityField.setText(sharedPreferences.getString(Constants.CITY, "Loading"));
+        updatedField.setText(sharedPreferences.getString(Constants.UPDATE, "Loading"));
+        detailsField.setText(sharedPreferences.getString(Constants.DETAIL, "Loading"));
+        currentTemp.setText(sharedPreferences.getString(Constants.TEMP, "Loading"));
+        weatherIcon.setText(sharedPreferences.getString(Constants.ICON, "Loading"));
     }
 }
